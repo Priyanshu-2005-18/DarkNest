@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Web & Cyber Threats</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #0a0a1a;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            margin: 0
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a2e
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00ff88;
+            border-radius: 4px
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00cc66
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 16rem;
+            background-color: #1a1a2e;
+            padding: 1rem;
+            overflow-y: auto;
+            z-index: 20
+        }
+
+        .sidebar-item.active {
+            background-color: #00ff88;
+            color: #0a0a1a;
+            border: 2px solid #00cc66;
+            border-radius: 4px;
+            transform: scale(1.05);
+            transition: all 0.2s ease
+        }
+
+        .sidebar-item:hover {
+            background-color: #00ff88;
+            color: #0a0a1a
+        }
+
+        .cyber-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer
+        }
+
+        .cyber-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5)
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 30;
+            align-items: center;
+            justify-content: center
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            padding: 1.5rem;
+            border: 2px solid #00ff88;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            position: relative
+        }
+
+        .modal-content svg {
+            margin-bottom: 0.5rem
+        }
+
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 1rem;
+            background: #00ff88;
+            color: #0a0a1a;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            z-index: 25
+        }
+
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 40;
+            transition: opacity 0.5s ease
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg)
+            }
+
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite
+        }
+
+        @media (max-width:768px) {
+            .sidebar {
+                position: fixed;
+                left: -16rem;
+                transition: left 0.3s ease
+            }
+
+            .sidebar.active {
+                left: 0
+            }
+
+            .sidebar-toggle {
+                display: block
+            }
+
+            .content {
+                padding-left: 0
+            }
+
+            .loader svg {
+                width: 48px;
+                height: 48px
+            }
+        }
+    </style>
+</head>
+
+<body class="relative">
+    <div class="loader" id="loader"><svg class="spinner w-16 h-16" viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="20" fill="none" stroke="#00ff88" stroke-width="4" stroke-dasharray="31.4 31.4" />
+        </svg></div>
+    <button class="sidebar-toggle" aria-label="Toggle Sidebar" onclick="toggleSidebar()">☰ Menu</button>
+    <div class="sidebar" id="sidebar">
+        <h2 class="text-xl font-bold text-[#00ff88] mb-4 font-['Orbitron']">Dark Web & Cyber Threats</h2>
+        <ul class="space-y-1">
+            <li><a href="#home" class="sidebar-item block p-2 transition-colors font-['Roboto Mono'] active"
+                    aria-label="Home">Home</a></li>
+            <li><a href="#what-is-dark-web" class="sidebar-item block p-2 transition-colors font-['Roboto Mono']"
+                    aria-label="What is the Dark Web">What is the Dark Web?</a></li>
+            <li><a href="#accessing-dark-web" class="sidebar-item block p-2 transition-colors font-['Roboto Mono']"
+                    aria-label="Accessing the Dark Web">Accessing the Dark Web</a></li>
+            <li><a href="#activities" class="sidebar-item block p-2 transition-colors font-['Roboto Mono']"
+                    aria-label="Activities">Activities</a></li>
+            <li><a href="#cyber-threats" class="sidebar-item block p-2 transition-colors font-['Roboto Mono']"
+                    aria-label="Cyber Threats">Cyber Threats</a></li>
+            <li><a href="#incidents" class="sidebar-item block p-2 transition-colors font-['Roboto Mono']"
+                    aria-label="Real-World Incidents">Real-World Incidents</a></li>
+            <li><a href="#law-enforcement" class="sidebar-item block p-2 transition-colors font-['Roboto Mono']"
+                    aria-label="Law Enforcement">Law Enforcement</a></li>
+            <li><a href="#protection" class="sidebar-item block p-2 transition-colors font-['Roboto Mono']"
+                    aria-label="Protect Yourself">Protect Yourself</a></li>
+            <li><a href="#future" class="sidebar-item block p-2 transition-colors font-['Roboto Mono']"
+                    aria-label="Future Trends">Future Trends</a></li>
+            <li><a href="#conclusion" class="sidebar-item block p-2 transition-colors font-['Roboto Mono']"
+                    aria-label="Conclusion and Resources">Conclusion & Resources</a></li>
+        </ul>
+    </div>
+    <div class="content pl-64 md:pl-64 lg:pl-64">
+        <section id="home" class="min-h-screen flex flex-col justify-center items-center bg-[#0a0a1a]">
+
+            <div class="flex justify-center mb-4 pt-0 mt-0">
+                <svg class="w-32 h-32 md:w-48 md:h-48" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#00ff88" stroke-width="2" />
+                    <path d="M30 50 L70 50 M50 30 L50 70" stroke="#00ff88" stroke-width="2" />
+                    <circle cx="50" cy="50" r="10" fill="#00ff88" />
+                </svg>
+            </div>
+            <div class="text-center max-w-3xl mx-auto px-4">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#00ff88] font-['Orbitron'] mb-2">Welcome to the World of
+                    the Dark Web</h1>
+                <p class="text-base md:text-lg mb-1">Unveil the Hidden Internet: Discover the Dark Web's Secrets and
+                    Stay Safe</p>
+                <p class="text-base md:text-lg mb-2">Explore the hidden corners of the internet, uncover cyber threats,
+                    and learn how to stay safe in a digital underworld. From anonymity to hacking, this site dives deep
+                    into the Dark Web.</p>
+                <div class="bg-[#1a1a2e] p-3 rounded mb-2">
+                    <h3 class="text-xl font-bold text-[#00ff88] mb-1">What You'll Learn</h3>
+                    <ul class="list-disc pl-6 text-left mx-auto max-w-md">
+                        <li>Understand the structure of the Dark Web</li>
+                        <li>Discover common activities and threats</li>
+                        <li>Learn how to protect yourself online</li>
+                        <li>Explore real-world incidents and responses</li>
+                    </ul>
+                </div>
+                <button onclick="document.getElementById('what-is-dark-web').scrollIntoView({behavior:'smooth'})"
+                    class="bg-[#00ff88] text-[#0a0a1a] px-6 py-2 rounded font-['Roboto Mono'] hover:bg-[#00cc66] transition-colors"
+                    aria-label="Start Exploring">Start Exploring</button>
+            </div>
+        </section>
+        <section id="what-is-dark-web" class="min-h-screen pt-12 bg-[#0a0a1a] flex items-center">
+            <div class="max-w-4xl mx-auto p-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#00ff88] font-['Orbitron'] mb-4">What is the Dark Web?
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Surface Web</h3>
+                        <p>Publicly accessible, indexed by search engines like Google.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Deep Web</h3>
+                        <p>Not indexed, includes private databases, paywalled content.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Dark Web</h3>
+                        <p>Hidden, accessible only via special tools like Tor, often anonymous.</p>
+                    </div>
+                </div>
+                <div class="bg-[#1a1a2e] p-4 rounded mb-4">
+                    <h3 class="text-2xl font-bold text-[#00ff88] mb-2">Internet Structure</h3><svg
+                        class="w-full h-24 md:h-32" viewBox="0 0 300 100">
+                        <rect x="10" y="10" width="80" height="80" fill="#00ff88" opacity="0.2" /><text x="50" y="50"
+                            fill="#00ff88" text-anchor="middle">Surface</text>
+                        <rect x="110" y="10" width="80" height="80" fill="#00ff88" opacity="0.4" /><text x="150" y="50"
+                            fill="#00ff88" text-anchor="middle">Deep</text>
+                        <rect x="210" y="10" width="80" height="80" fill="#00ff88" opacity="0.6" /><text x="250" y="50"
+                            fill="#00ff88" text-anchor="middle">Dark</text>
+                    </svg>
+                </div>
+                <table class="w-full text-left bg-[#1a1a2e] rounded">
+                    <thead>
+                        <tr class="border-b border-[#00ff88]">
+                            <th class="p-3">Myth</th>
+                            <th class="p-3">Reality</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="p-3">Dark Web is only for criminals.</td>
+                            <td class="p-3">Used by journalists, activists for anonymity.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3">It’s completely untraceable.</td>
+                            <td class="p-3">Law enforcement can track with effort.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <section id="accessing-dark-web" class="min-h-screen pt-12 bg-[#0a0a1a] flex items-center">
+            <div class="max-w-4xl mx-auto p-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#00ff88] font-['Orbitron'] mb-4">Accessing the Dark Web
+                </h2>
+                <p class="mb-3">The Dark Web is a hidden part of the internet accessible only through specialized
+                    software that ensures anonymity. Tools like Tor, I2P, and Freenet route traffic through multiple
+                    encrypted nodes, masking user identities.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center"><svg class="w-16 h-16 mx-auto mb-1"
+                            viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="#00ff88" opacity="0.3" /><text x="50" y="55"
+                                fill="#00ff88" text-anchor="middle">Tor</text>
+                        </svg>
+                        <h3 class="text-xl font-bold text-[#00ff88]">Tor Browser</h3>
+                        <p>Primary tool for accessing .onion sites.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center"><svg class="w-16 h-16 mx-auto mb-1"
+                            viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="#00ff88" opacity="0.3" /><text x="50" y="55"
+                                fill="#00ff88" text-anchor="middle">I2P</text>
+                        </svg>
+                        <h3 class="text-xl font-bold text-[#00ff88]">I2P</h3>
+                        <p>Alternative anonymity network for dark web access.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center"><svg class="w-16 h-16 mx-auto mb-1"
+                            viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="#00ff88" opacity="0.3" /><text x="50" y="55"
+                                fill="#00ff88" text-anchor="middle">Freenet</text>
+                        </svg>
+                        <h3 class="text-xl font-bold text-[#00ff88]">Freenet</h3>
+                        <p>Peer-to-peer platform for anonymous communication.</p>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-[#00ff88] mb-2">How to Access</h3>
+                <div class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3 mb-4">
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded flex-1">
+                        <h4 class="text-lg font-bold text-[#00ff88]">Step 1: Install Software</h4>
+                        <p>Download Tor Browser, I2P, or Freenet from official sites. Verify signatures to avoid
+                            malware.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded flex-1">
+                        <h4 class="text-lg font-bold text-[#00ff88]">Step 2: Configure Settings</h4>
+                        <p>Adjust security sliders (e.g., Tor’s “Safest” mode) and enable VPN for extra protection.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded flex-1">
+                        <h4 class="text-lg font-bold text-[#00ff88]">Step 3: Access .onion Links</h4>
+                        <p>Find verified .onion URLs from trusted directories like The Hidden Wiki.</p>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-bold text-[#00ff88] mb-2">Usage Breakdown</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-[#1a1a2e] p-3 rounded">
+                        <h4 class="text-lg font-bold text-[#00ff88]">Legal Usage</h4>
+                        <ul class="list-disc pl-5">
+                            <li>Journalists protecting sources</li>
+                            <li>Activists in oppressive regimes</li>
+                            <li>Privacy-conscious browsing</li>
+                        </ul>
+                    </div>
+                    <div class="bg-[#1a1a2e] p-3 rounded">
+                        <h4 class="text-lg font-bold text-[#00ff88]">Illegal Usage</h4>
+                        <ul class="list-disc pl-5">
+                            <li>Drug trafficking</li>
+                            <li>Weapon sales</li>
+                            <li>Hacking services</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="mt-3">Warning: Accessing the Dark Web carries risks. Always prioritize security and legality.
+                </p>
+            </div>
+        </section>
+        <section id="activities" class="min-h-screen pt-12 bg-[#0a0a1a] flex items-center">
+            <div class="max-w-4xl mx-auto p-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#00ff88] font-['Orbitron'] mb-4">Activities on the Dark
+                    Web</h2>
+                <p class="mb-3">The Dark Web hosts a range of activities, from illegal markets to secure communication.
+                    Click each card to explore detailed insights.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center" onclick="openModal('marketplaces')"
+                        aria-label="Marketplaces Details"><svg class="w-12 h-12 mx-auto mb-1" fill="#00ff88"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" />
+                        </svg>
+                        <h3 class="text-xl font-bold text-[#00ff88]">Marketplaces</h3>
+                        <p>Drugs, counterfeit goods</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center" onclick="openModal('forums')"
+                        aria-label="Forums Details"><svg class="w-12 h-12 mx-auto mb-1" fill="#00ff88"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM16 16H8v-2h8v2zm0-4H8v-2h8v2z" />
+                        </svg>
+                        <h3 class="text-xl font-bold text-[#00ff88]">Forums</h3>
+                        <p>Hacker discussions</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center" onclick="openModal('whistleblowing')"
+                        aria-label="Whistleblowing Details"><svg class="w-12 h-12 mx-auto mb-1" fill="#00ff88"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 16l-5-5h10l-5 5z" />
+                        </svg>
+                        <h3 class="text-xl font-bold text-[#00ff88]">Whistleblowing</h3>
+                        <p>Secure leaks</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center" onclick="openModal('crypto')"
+                        aria-label="Cryptocurrency Details"><svg class="w-12 h-12 mx-auto mb-1" fill="#00ff88"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 18c-3.31 0-6-2.69-6-6h2c0 2.21 1.79 4 4 4s4-1.79 4-4h2c0 3.31-2.69 6-6 6z" />
+                        </svg>
+                        <h3 class="text-xl font-bold text-[#00ff88]">Crypto</h3>
+                        <p>Bitcoin transactions</p>
+                    </div>
+                </div>
+                <div id="modal" class="modal" role="dialog" aria-labelledby="modal-title">
+                    <div class="modal-content"><svg id="modal-icon" class="w-12 h-12 mx-auto" fill="#00ff88"
+                            viewBox="0 0 24 24"></svg>
+                        <h3 id="modal-title" class="text-2xl font-bold text-[#00ff88] mb-2 text-center"></h3>
+                        <p id="modal-description" class="mb-3"></p><button onclick="closeModal()"
+                            class="bg-[#00ff88] text-[#0a0a1a] px-4 py-2 rounded hover:bg-[#00cc66] w-full"
+                            aria-label="Close Modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="cyber-threats" class="min-h-screen pt-12 bg-[#0a0a1a] flex items-center">
+            <div class="max-w-4xl mx-auto p-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#00ff88] font-['Orbitron'] mb-4">Cyber Threats</h2>
+                <p class="mb-3">The Dark Web is a hub for cybercriminal activities, offering tools and services that
+                    fuel global cyber threats.</p>
+                <div class="space-y-4">
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Hacking Services</h3>
+                        <p>Freelance hackers offer services like website defacement, account compromise, and espionage
+                            for hire.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Data Leaks</h3>
+                        <p>Stolen credentials, credit card details, and personal data are sold in bulk, often for as low
+                            as $1 per record.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Phishing Kits</h3>
+                        <p>Pre-built phishing pages targeting banks, social media, and crypto wallets are sold for easy
+                            deployment.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Ransomware</h3>
+                        <p>Ransomware-as-a-service (RaaS) allows non-technical criminals to launch devastating attacks.
+                        </p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">DDoS Attacks</h3>
+                        <p>Botnets are rented to overwhelm websites or networks, disrupting services for ransom or
+                            revenge.</p>
+                    </div>
+                    <div class="bg-[#1a1a2e] p-3 rounded text-center"><svg class="w-24 h-24 md:w-32 md:h-32 mx-auto"
+                            viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#00ff88" stroke-width="4"
+                                class="animate-pulse" /><text x="50" y="55" fill="#00ff88" text-anchor="middle">High
+                                Risk</text>
+                        </svg>
+                        <p class="mt-1">Threat Level: Critical</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="incidents" class="min-h-screen pt-12 bg-[#0a0a1a] flex items-center">
+            <div class="max-w-4xl mx-auto p-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#00ff88] font-['Orbitron'] mb-4">Real-World Incidents
+                </h2>
+                <p class="mb-3">Dark Web activities have fueled major cyber incidents, causing billions in damages.
+                    Click each card for details.</p>
+                <div class="space-y-4">
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded" onclick="openIncidentModal('silk-road')"
+                        aria-label="Silk Road Details">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Silk Road (2011–2013)</h3>
+                        <p>A notorious marketplace for drugs and illegal goods, shut down by the FBI.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded" onclick="openIncidentModal('alphabay')"
+                        aria-label="AlphaBay Details">
+                        <h3 class="text-xl font-bold text-[#00ff88]">AlphaBay (2014–2017)</h3>
+                        <p>Largest dark web market post-Silk Road, handling drugs and hacking tools.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded" onclick="openIncidentModal('wannacry')"
+                        aria-label="WannaCry Details">
+                        <h3 class="text-xl font-bold text-[#00ff88]">WannaCry (2017)</h3>
+                        <p>Ransomware attack affecting 200,000+ systems globally.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded" onclick="openIncidentModal('notpetya')"
+                        aria-label="NotPetya Details">
+                        <h3 class="text-xl font-bold text-[#00ff88]">NotPetya (2017)</h3>
+                        <p>Destructive malware targeting Ukraine, causing $10 billion in losses.</p>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded" onclick="openIncidentModal('solarwinds')"
+                        aria-label="SolarWinds Details">
+                        <h3 class="text-xl font-bold text-[#00ff88]">SolarWinds (2020)</h3>
+                        <p>Supply chain attack compromising 18,000 organizations.</p>
+                    </div>
+                    <div class="bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Impact Metrics</h3><svg class="w-full h-24 md:h-32"
+                            viewBox="0 0 300 100">
+                            <polyline points="10,90 60,70 120,50 180,60 240,30 290,20" fill="none" stroke="#00ff88"
+                                stroke-width="2" /><text x="10" y="95" fill="#00ff88">2013</text><text x="290" y="25"
+                                fill="#00ff88">2020</text>
+                        </svg>
+                        <p>Timeline of financial damages (in billions).</p>
+                    </div>
+                </div>
+                <div id="incident-modal" class="modal" role="dialog" aria-labelledby="incident-modal-title">
+                    <div class="modal-content"><svg id="incident-modal-icon" class="w-12 h-12 mx-auto" fill="#00ff88"
+                            viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+                        </svg>
+                        <h3 id="incident-modal-title" class="text-2xl font-bold text-[#00ff88] mb-2 text-center"></h3>
+                        <p id="incident-modal-description" class="mb-3"></p><button onclick="closeIncidentModal()"
+                            class="bg-[#00ff88] text-[#0a0a1a] px-4 py-2 rounded hover:bg-[#00cc66] w-full"
+                            aria-label="Close Incident Modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="law-enforcement" class="min-h-screen pt-12 bg-[#0a0a1a] flex items-center">
+            <div class="max-w-4xl mx-auto p-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#00ff88] font-['Orbitron'] mb-4">Law Enforcement &
+                    Cybersecurity Response</h2>
+                <p class="mb-3">Global agencies and ethical hackers work tirelessly to combat Dark Web crimes.</p>
+                <div class="space-y-4">
+                    <div class="bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88] mb-2">Major Operations</h3>
+                        <ul class="space-y-1">
+                            <li><strong>2013: Silk Road Takedown</strong> - FBI arrested Ross Ulbricht, seizing $28
+                                million in Bitcoin.</li>
+                            <li><strong>2014: Operation Onymous</strong> - Europol and FBI shut down 400+ .onion sites,
+                                including Silk Road 2.0.</li>
+                            <li><strong>2017: AlphaBay & Hansa Seizure</strong> - Operation Bayonet led to the largest
+                                dark web market takedowns.</li>
+                            <li><strong>2021: DarkMarket Shutdown</strong> - German police dismantled a major
+                                marketplace with 500,000 users.</li>
+                        </ul>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center"><svg class="w-16 h-16 mx-auto mb-1"
+                                viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#00ff88" opacity="0.3" /><text x="50" y="55"
+                                    fill="#00ff88" text-anchor="middle">FBI</text>
+                            </svg>
+                            <p>Federal Bureau of Investigation</p>
+                        </div>
+                        <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center"><svg class="w-16 h-16 mx-auto mb-1"
+                                viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#00ff88" opacity="0.3" /><text x="50" y="55"
+                                    fill="#00ff88" text-anchor="middle">Europol</text>
+                            </svg>
+                            <p>European Police Agency</p>
+                        </div>
+                        <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center"><svg class="w-16 h-16 mx-auto mb-1"
+                                viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="40" fill="#00ff88" opacity="0.3" /><text x="50" y="55"
+                                    fill="#00ff88" text-anchor="middle">Interpol</text>
+                            </svg>
+                            <p>International Criminal Police</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88] mb-2">Ethical Hacking</h3>
+                        <p>White-hat hackers infiltrate Dark Web forums to gather intelligence, develop countermeasures,
+                            and assist law enforcement.</p><svg class="w-full h-20 md:h-24" viewBox="0 0 300 100">
+                            <path d="M10 50 L100 30 L200 70 L290 50" fill="none" stroke="#00ff88" stroke-width="2" />
+                            <text x="150" y="90" fill="#00ff88" text-anchor="middle">Hacker Workflow</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="protection" class="min-h-screen pt-12 bg-[#0a0a1a] flex items-center">
+            <div class="max-w-4xl mx-auto p-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#00ff88] font-['Orbitron'] mb-4">Protect Yourself</h2>
+                <p class="mb-3">Safeguard your digital life with these essential cybersecurity practices to mitigate
+                    risks from Dark Web threats.</p>
+                <div class="space-y-4">
+                    <div class="bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88] mb-2">Practical Tips</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li><strong>Use a VPN</strong>: Encrypt your internet connection to mask your IP address and
+                                protect your browsing activity from prying eyes.</li>
+                            <li><strong>Enable 2FA</strong>: Add an extra layer of security to your accounts by
+                                requiring a second form of verification, such as a code sent to your phone.</li>
+                            <li><strong>Install Antivirus Software</strong>: Use reputable antivirus programs to detect
+                                and remove malware before it can cause harm.</li>
+                            <li><strong>Use a Password Manager</strong>: Generate and store complex, unique passwords
+                                for each account to prevent credential stuffing attacks.</li>
+                            <li><strong>Avoid Suspicious Links</strong>: Be cautious of phishing emails and links that
+                                may lead to malicious sites or data theft.</li>
+                            <li><strong>Regularly Update Software</strong>: Keep your operating system, apps, and
+                                devices updated to patch vulnerabilities exploited by hackers.</li>
+                        </ul>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center"><svg class="w-12 h-12 mx-auto mb-1"
+                                fill="#00ff88" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+                            </svg>
+                            <p>VPN</p>
+                        </div>
+                        <div class="cyber-card bg-[#1a1a2e] p-3 rounded text-center"><svg class="w-12 h-12 mx-auto mb-1"
+                                fill="#00ff88" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
+                            </svg>
+                            <p>2FA</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88] mb-2">Security Tools Comparison</h3>
+                        <table class="w-full text-left bg-[#1a1a2e] rounded">
+                            <thead>
+                                <tr class="border-b border-[#00ff88]">
+                                    <th class="p-3">Tool</th>
+                                    <th class="p-3">Purpose</th>
+                                    <th class="p-3">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-3">VPN</td>
+                                    <td class="p-3">Encrypts internet traffic</td>
+                                    <td class="p-3">NordVPN, ExpressVPN</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3">2FA</td>
+                                    <td class="p-3">Adds account security</td>
+                                    <td class="p-3">Google Authenticator</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3">Password Manager</td>
+                                    <td class="p-3">Stores complex passwords</td>
+                                    <td class="p-3">LastPass, 1Password</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bg-[#1a1a2e] p-3 rounded text-center">
+                        <h3 class="text-xl font-bold text-[#00ff88] mb-2">Security Layers</h3><svg
+                            class="w-full h-24 md:h-32 mx-auto" viewBox="0 0 150 100">
+                            <circle cx="75" cy="50" r="40" fill="none" stroke="#00ff88" stroke-width="2" />
+                            <circle cx="75" cy="50" r="30" fill="none" stroke="#00ff88" stroke-width="2" />
+                            <circle cx="75" cy="50" r="20" fill="none" stroke="#00ff88" stroke-width="2" /><text x="75"
+                                y="55" fill="#00ff88" text-anchor="middle">Secure</text>
+                        </svg>
+                        <p class="mt-1">Layered security approach: VPN → 2FA → Antivirus</p>
+                    </div>
+                    <div class="bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88] mb-2">Emergency Contacts</h3>
+                        <p>If you suspect a cyber threat or data breach, contact these helplines:</p>
+                        <ul class="list-disc pl-5 mt-1">
+                            <li><strong>National Cyber Helpline</strong>: 1-800-CYBER-HELP</li>
+                            <li><strong>Global Security Response</strong>: 1-888-SECURE-NOW</li>
+                            <li><strong>Local Law Enforcement</strong>: Contact your local police department for
+                                immediate assistance.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="future" class="min-h-screen pt-12 bg-[#0a0a1a] flex items-center">
+            <div class="max-w-4xl mx-auto p-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#00ff88] font-['Orbitron'] mb-4">Future of Dark Web &
+                    Cybersecurity</h2>
+                <p class="mb-3">The Dark Web is evolving with emerging technologies, presenting both opportunities and
+                    threats.</p>
+                <div class="space-y-4">
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Legal Uses</h3>
+                        <ul class="list-disc pl-5">
+                            <li><strong>Secure Communication</strong>: Journalists and activists use the Dark Web to
+                                evade censorship.</li>
+                            <li><strong>Research</strong>: Academics study Dark Web markets to understand criminal
+                                behavior.</li>
+                            <li><strong>Whistleblowing</strong>: Platforms like SecureDrop enable anonymous leaks.</li>
+                        </ul>
+                    </div>
+                    <div class="cyber-card bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88]">Emerging Threats</h3>
+                        <ul class="list-disc pl-5">
+                            <li><strong>AI-Driven Attacks</strong>: Machine learning enhances phishing and malware
+                                automation.</li>
+                            <li><strong>Web3 Vulnerabilities</strong>: Decentralized platforms introduce new attack
+                                vectors.</li>
+                            <li><strong>Blockchain Exploits</strong>: Cryptocurrency theft via smart contract flaws.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-[#1a1a2e] p-3 rounded">
+                        <h3 class="text-xl font-bold text-[#00ff88] mb-2">Future Trends</h3><svg
+                            class="w-full h-24 md:h-32" viewBox="0 0 300 100">
+                            <circle cx="50" cy="50" r="20" fill="#00ff88" opacity="0.5" /><text x="50" y="55"
+                                fill="#00ff88" text-anchor="middle">AI</text>
+                            <circle cx="150" cy="50" r="20" fill="#00ff88" opacity="0.5" /><text x="150" y="55"
+                                fill="#00ff88" text-anchor="middle">Web3</text>
+                            <circle cx="250" cy="50" r="20" fill="#00ff88" opacity="0.5" /><text x="250" y="55"
+                                fill="#00ff88" text-anchor="middle">Blockchain</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="conclusion" class="min-h-screen pt-12 bg-[#0a0a1a] flex items-center">
+            <div class="max-w-4xl mx-auto p-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-[#00ff88] font-['Orbitron'] mb-4">Conclusion & Resources
+                </h2>
+                <div class="bg-[#1a1a2e] p-4 rounded mb-4">
+                    <h3 class="text-xl font-bold text-[#00ff88] mb-2">Conclusion</h3>
+                    <p class="mb-3">The Dark Web is a double-edged sword: a haven for privacy and free speech, yet a
+                        breeding ground for cybercrime. Understanding its mechanics, threats, and countermeasures is
+                        crucial in today’s digital age. By staying informed and adopting robust cybersecurity practices,
+                        individuals and organizations can navigate this complex landscape safely.</p>
+                </div>
+                <div class="bg-[#1a1a2e] p-4 rounded mb-4">
+                    <h3 class="text-xl font-bold text-[#00ff88] mb-2">Resources</h3>
+                    <ul class="list-disc pl-5">
+                        <li><a href="#" class="text-[#00ff88] hover:underline">Dark Web Guide (PDF)</a></li>
+                        <li><a href="#" class="text-[#00ff88] hover:underline">Tor Project Official Site</a></li>
+                        <li><a href="#" class="text-[#00ff88] hover:underline">Cybersecurity Best Practices (PDF)</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-[#1a1a2e] p-4 rounded mb-4">
+                    <h3 class="text-xl font-bold text-[#00ff88] mb-2">Glossary</h3>
+                    <p><strong>Tor</strong>: Anonymity network for accessing the Dark Web.<br><strong>.onion</strong>:
+                        Domain suffix for Dark Web sites.<br><strong>Bitcoin</strong>: Cryptocurrency used for Dark Web
+                        transactions.</p>
+                </div>
+                <div class="bg-[#1a1a2e] p-4 rounded">
+                    <h3 class="text-xl font-bold text-[#00ff88] mb-2">Credits</h3>
+                    <p>Designed and authored by Priyanshu Prasad</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script>
+        window.onload = () => {
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('home').scrollIntoView({ behavior: 'instant' });
+        };
+
+        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('active') }
+        document.querySelectorAll('.sidebar-item').forEach(link => { link.addEventListener('click', e => { e.preventDefault(); const targetId = link.getAttribute('href').substring(1); document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' }); document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active')); link.classList.add('active'); if (window.innerWidth < 768) { toggleSidebar() } }) });
+        window.addEventListener('scroll', () => { const sections = ['home', 'what-is-dark-web', 'accessing-dark-web', 'activities', 'cyber-threats', 'incidents', 'law-enforcement', 'protection', 'future', 'conclusion']; let current = ''; for (const section of sections) { const element = document.getElementById(section); if (element.getBoundingClientRect().top <= 100 && element.getBoundingClientRect().bottom > 100) { current = section; break } } document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active')); if (current) { document.querySelector(`.sidebar-item[href="#${current}"]`).classList.add('active') } });
+        const modal = document.getElementById('modal'), modalTitle = document.getElementById('modal-title'), modalDescription = document.getElementById('modal-description'), modalIcon = document.getElementById('modal-icon'), activityDetails = { marketplaces: { title: 'Marketplaces', description: 'Dark Web marketplaces function like underground e-commerce platforms, offering drugs, counterfeit money, stolen data, weapons, and more. Notable examples include Silk Road and AlphaBay. These markets use cryptocurrencies like Bitcoin for anonymous transactions, often employing escrow systems to build trust between buyers and sellers. However, they are frequent targets for law enforcement takedowns.', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>' }, forums: { title: 'Forums', description: 'Hacker forums on the Dark Web are communities where cybercriminals exchange knowledge, share exploits, sell malware, and collaborate on attacks. Ranging from public boards to exclusive, invite-only groups, forums like RaidForums have been linked to major data breaches. These platforms foster a culture of innovation in cybercrime, but also attract law enforcement sting operations.', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM16 16H8v-2h8v2zm0-4H8v-2h8v2z"/>' }, whistleblowing: { title: 'Whistleblowing', description: 'The Dark Web hosts platforms like SecureDrop, enabling whistleblowers to leak sensitive information anonymously. Used by journalists, activists, and insiders in oppressive regimes or corrupt organizations, these platforms ensure secure document transfers without traceability. They play a critical role in exposing corruption and human rights abuses, but require robust security to protect users.', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 16l-5-5h10l-5 5z"/>' }, crypto: { title: 'Cryptocurrency', description: 'Cryptocurrencies like Bitcoin and Monero are the lifeblood of Dark Web transactions, enabling anonymous payments. Wallet services and tumblers obscure transaction trails, making tracking difficult. However, blockchain analysis has led to breakthroughs in major cases, with law enforcement tracing funds to dismantle markets like AlphaBay. Crypto remains both a tool and a target in the Dark Web ecosystem.', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 18c-3.31 0-6-2.69-6-6h2c0 2.21 1.79 4 4 4s4-1.79 4-4h2c0 3.31-2.69 6-6 6z"/>' } }; function openModal(activity) { modalTitle.textContent = activityDetails[activity].title; modalDescription.textContent = activityDetails[activity].description; modalIcon.innerHTML = activityDetails[activity].icon; modal.style.display = 'flex' } function closeModal() { modal.style.display = 'none' }
+        const incidentModal = document.getElementById('incident-modal'), incidentModalTitle = document.getElementById('incident-modal-title'), incidentModalDescription = document.getElementById('incident-modal-description'), incidentModalIcon = document.getElementById('incident-modal-icon'), incidentDetails = { 'silk-road': { title: 'Silk Road (2011–2013)', description: 'Silk Road was the first major Dark Web marketplace, operating as a platform for drugs, hacking tools, and illegal services. Founded by Ross Ulbricht (aka Dread Pirate Roberts), it processed over $1 billion in transactions using Bitcoin. The FBI shut it down in 2013, arresting Ulbricht and seizing $28 million in cryptocurrency. The takedown marked a turning point in Dark Web enforcement.', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>' }, alphabay: { title: 'AlphaBay (2014–2017)', description: 'AlphaBay emerged as the largest Dark Web market after Silk Road, offering drugs, weapons, and hacking services. It handled millions in daily transactions until its seizure in 2017 during Operation Bayonet, a joint effort by the FBI, Europol, and Dutch police. The operation also took down Hansa Market, disrupting the Dark Web economy and leading to numerous arrests.', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM16 16H8v-2h8v2zm0-4H8v-2h8v2z"/>' }, wannacry: { title: 'WannaCry (2017)', description: 'WannaCry was a global ransomware attack that infected over 200,000 systems across 150 countries, exploiting a Windows vulnerability (EternalBlue). Linked to North Korean hackers, it caused $4 billion in damages, targeting hospitals, banks, and businesses. Dark Web forums facilitated the spread of exploit kits, highlighting the role of underground markets in amplifying cyber threats.', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 16l-5-5h10l-5 5z"/>' }, notpetya: { title: 'NotPetya (2017)', description: 'NotPetya, disguised as ransomware, was a destructive malware attack primarily targeting Ukraine but causing $10 billion in global damages. Spread via a compromised software update, it wiped systems at companies like Maersk and Merck. Dark Web exploit kits fueled its rapid spread, underscoring the dangers of supply chain attacks and the Dark Web’s role in malware distribution.', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 18c-3.31 0-6-2.69-6-6h2c0 2.21 1.79 4 4 4s4-1.79 4-4h2c0 3.31-2.69 6-6 6z"/>' }, solarwinds: { title: 'SolarWinds (2020)', description: 'The SolarWinds attack was a sophisticated supply chain breach compromising 18,000 organizations, including U.S. government agencies and tech giants. Attributed to Russian state actors, it involved backdoored software updates. Dark Web forums sold access to breached systems, enabling espionage and data theft. The incident exposed vulnerabilities in global software supply chains.', icon: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM16 16H8v-2h8v2zm0-4H8v-2h8v2z"/>' } }; function openIncidentModal(incident) { incidentModalTitle.textContent = incidentDetails[incident].title; incidentModalDescription.textContent = incidentDetails[incident].description; incidentModalIcon.innerHTML = incidentDetails[incident].icon; incidentModal.style.display = 'flex' } function closeIncidentModal() { incidentModal.style.display = 'none' }
+        window.onclick = event => { if (event.target === modal) { closeModal() } if (event.target === incidentModal) { closeIncidentModal() } };
+    </script>
+</body>
+
+</html>
