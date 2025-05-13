@@ -58,6 +58,6 @@ This project is open source and available under the [MIT License](LICENSE).
 
 - **Name:** Priyanshu Prasad  
 - 🌐 **Live Project:** [https://darknest.infy.uk](https://darknest.infy.uk)
-- 🐙 **GitHub:** [@your-username-here](https://github.com/your-username-here) *(replace this with your real GitHub link)*
+- 🐙 **GitHub:** [@Priyanshu-2005-18](https://github.com/Priyanshu-2005-18)
 
 
